@@ -13,23 +13,27 @@ export const AltchaContextProvider = ({
   const [payload, setPayload] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
 
-  const verifySignature = useCallback(async (payload: string) => {
-    const formData = new URLSearchParams();
-    formData.append("payload", payload); // assuming 'payload' is a base64 string
+  const challengeURL = process.env.NEXT_PUBLIC_CHALLENGE_URL;
+  const verifySignature = useCallback(
+    async (payload: string) => {
+      const formData = new URLSearchParams();
+      formData.append("payload", payload); // assuming 'payload' is a base64 string
+      const url = `${challengeURL}/verify-challenge`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: formData,
+      });
 
-    const response = await fetch("http://localhost:8080/verify-challenge", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: formData,
-    });
-
-    const data = await response.json();
-    if (data.verified) {
-      setVerifiedSignature(true);
-    }
-  }, []);
+      const data = await response.json();
+      if (data.verified) {
+        setVerifiedSignature(true);
+      }
+    },
+    [challengeURL]
+  );
 
   useEffect(() => {
     const altchaElement = document.querySelector(".altcha");
@@ -47,12 +51,12 @@ export const AltchaContextProvider = ({
             setVerified(true);
             const inputElement = document.querySelector(
               'input[name="altcha"]'
-            ) as HTMLInputElement; // Typecast to HTMLInputElement
+            ) as HTMLInputElement;
             if (inputElement) {
               setPayload(inputElement.value);
               verifySignature(inputElement.value);
               console.log("Payload:", inputElement.value);
-              break; // Exit loop once the input is found and logged
+              break;
             }
           }
         }
@@ -65,7 +69,6 @@ export const AltchaContextProvider = ({
       observer.observe(altchaElement, config);
     }
 
-    // Clean up the observer when the component unmounts
     return () => {
       if (altchaElement) {
         observer.disconnect();
@@ -84,7 +87,8 @@ export const AltchaContextProvider = ({
         <form ref={formRef}>
           <altcha-widget
             auto="onload"
-            challengeurl="http://localhost:8080/get-challenge"
+            // challengeurl="http://localhost:8080/get-challenge"
+            challengeurl={`${challengeURL}/get-challenge`}
           ></altcha-widget>
           <button disabled={!verified} type="submit">
             Submit
