@@ -46,7 +46,6 @@ export const AltchaContextProvider = ({
           mutation.attributeName === "data-state"
         ) {
           const newState = mutation.target.getAttribute("data-state");
-          console.log("New state:", newState);
           if (newState === "verified") {
             setVerified(true);
             const inputElement = document.querySelector(
@@ -55,7 +54,6 @@ export const AltchaContextProvider = ({
             if (inputElement) {
               setPayload(inputElement.value);
               verifySignature(inputElement.value);
-              console.log("Payload:", inputElement.value);
               break;
             }
           }
@@ -81,6 +79,8 @@ export const AltchaContextProvider = ({
     id: payload,
   };
 
+  // we can later pass these things to the consumer
+  // fo rnow since its a proof of concept we will just use the context
   if (!verifiedSignature) {
     return (
       <AltchaContext.Provider value={value}>
