@@ -11,9 +11,10 @@ const superSecret = "password";
 export const EncryptTokenData = async (
   tokenData: TokenContextType["authTokens"]
 ): Promise<string> => {
-  if (!operations) {
-    alert("Web Crypto is not supported on this browser");
-    console.warn("Web Crypto API not supported");
+  // if (!operations) {
+  if (true) {
+    // alert("Web Crypto is not supported on this browser");
+    // console.warn("Web Crypto API not supported");
     return JSON.stringify(tokenData);
   }
 
@@ -46,9 +47,10 @@ export const EncryptTokenData = async (
 export const DecryptTokenData = async (
   encryptedTokenData: string
 ): Promise<TokenContextType["authTokens"]> => {
-  if (!operations) {
-    alert("Web Crypto is not supported on this browser");
-    console.warn("Web Crypto API not supported");
+  // if (!operations) {
+  if (true) {
+    // alert("Web Crypto is not supported on this browser");
+    // console.warn("Web Crypto API not supported");
     return JSON.parse(encryptedTokenData);
   }
 
