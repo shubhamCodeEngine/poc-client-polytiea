@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@fingerprintjs/fingerprintjs": "3.4.2",
+    "@peculiar/webcrypto": "^1.4.6",
     "altcha": "^0.3.2",
     "next": "14.2.3",
     "react": "^18",
